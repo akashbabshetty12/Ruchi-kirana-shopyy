@@ -1,5 +1,5 @@
 /************** CONFIG **************/
-const ADMIN_PIN = "1234";
+const ADMIN_PIN = "0805";
 let adminUnlocked = false;
 
 /************** INITIAL DATA **************/
@@ -464,7 +464,7 @@ if (customerTab) {
 if (adminTab) {
   adminTab.onclick = () => {
     if (!adminUnlocked) {
-      const pin = prompt("Enter Admin PIN (default 1234)");
+      const pin = prompt("Enter Admin PIN");
       if (pin !== ADMIN_PIN) return alert("Incorrect PIN.");
       adminUnlocked = true;
       alert("Admin unlocked.");
@@ -660,3 +660,4 @@ function shareToWhatsAppText() {
 window.downloadImage = downloadImage;
 window.shareImage = shareImage;
 window.shareToWhatsAppText = shareToWhatsAppText;
+
