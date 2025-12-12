@@ -12,13 +12,11 @@ let selectedCategory = "All";
 let drawerOpen = false;
 let currentBillDate = null;
 
-/************** ADMIN PIN (DEVICE-BASED) **************/
+/************** DEVICE-BASED ADMIN PIN (ALWAYS ASK) **************/
 let savedAdminPin = localStorage.getItem("adminPin");
-let adminUnlocked = localStorage.getItem("adminLoggedIn") === "true";
 
-// First-time PIN setup or PIN verification
 function requestAdminPin() {
-  // FIRST TIME – Set PIN
+  // FIRST TIME → CREATE PIN
   if (!savedAdminPin) {
     const newPin = prompt("Set new Admin PIN:");
     if (!newPin || newPin.trim() === "") {
@@ -27,32 +25,18 @@ function requestAdminPin() {
     }
     localStorage.setItem("adminPin", newPin);
     savedAdminPin = newPin;
-    localStorage.setItem("adminLoggedIn", "true");
-    adminUnlocked = true;
     alert("Admin PIN created successfully!");
     return true;
   }
 
-  // LATER – Verify PIN
+  // EVERY TIME → ASK FOR PIN
   const entered = prompt("Enter Admin PIN:");
   if (entered === savedAdminPin) {
-    localStorage.setItem("adminLoggedIn", "true");
-    adminUnlocked = true;
     return true;
   }
 
   alert("Incorrect PIN.");
   return false;
-}
-
-// Reset PIN
-function resetAdminPin() {
-  if (!confirm("Reset Admin PIN?")) return;
-  localStorage.removeItem("adminPin");
-  localStorage.removeItem("adminLoggedIn");
-  savedAdminPin = null;
-  adminUnlocked = false;
-  alert("Admin PIN reset. You will set a new PIN next time.");
 }
 
 /************** NORMALIZE PRODUCTS **************/
@@ -500,14 +484,11 @@ if (customerTab) {
   };
 }
 
-/*** ADMIN TAB (PIN PROTECTED) ***/
+/*** ADMIN TAB — ALWAYS ASK PIN ***/
 if (adminTab) {
   adminTab.onclick = () => {
 
-    // Unlock admin using device PIN
-    if (!adminUnlocked) {
-      if (!requestAdminPin()) return;
-    }
+    if (!requestAdminPin()) return;
 
     if (adminSection) adminSection.style.display = "block";
     if (customerSection) customerSection.style.display = "none";
@@ -547,7 +528,6 @@ renderHistory();
    IMAGE GENERATION + SAVE + WHATSAPP SHARE (FIXED)
 ----------------------------------------------------------*/
 
-/*** Generate Bill HTML for capture ***/
 function generateBillHTML() {
   let html = `<div style='padding:20px;font-family:sans-serif;border:1px solid #ccc;width:320px;background:white;color:#111;'>`;
   html += `<h2 style="margin:0 0 8px 0;">🛒 Ruchi Kirana Shop</h2>`;
@@ -570,7 +550,6 @@ function generateBillHTML() {
   return html;
 }
 
-/*** Create PNG blob using html2canvas ***/
 async function generateBillBlob() {
   if (!validateCustomerName()) throw new Error("Enter customer name first.");
 
@@ -594,13 +573,11 @@ async function generateBillBlob() {
   }
 }
 
-/*** SAVE / DOWNLOAD PNG ***/
 async function downloadImage() {
   try {
     const blob = await generateBillBlob();
-    saveBillToHistory(); // save into history on user download
+    saveBillToHistory();
 
-    // Preferred: use File System Access API if available (desktop chromium)
     if (window.showSaveFilePicker) {
       try {
         const opts = {
@@ -618,12 +595,10 @@ async function downloadImage() {
         alert("Saved successfully.");
         return;
       } catch (err) {
-        // user cancelled or API failed -> fallback to anchor download
         console.warn("showSaveFilePicker failed or cancelled:", err);
       }
     }
 
-    // Anchor fallback for mobile & desktop
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -639,7 +614,6 @@ async function downloadImage() {
   }
 }
 
-/*** SHARE IMAGE USING NATIVE SHARE SHEET ***/
 async function shareImage() {
   try {
     const blob = await generateBillBlob();
@@ -647,7 +621,6 @@ async function shareImage() {
 
     const file = new File([blob], `Bill_${Date.now()}.png`, { type: "image/png" });
 
-    // Use navigator.canShare where available
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
@@ -658,11 +631,9 @@ async function shareImage() {
         return;
       } catch (err) {
         console.warn("navigator.share with files failed:", err);
-        // fall through to other attempts
       }
     }
 
-    // Some browsers support share without canShare
     if (navigator.share) {
       try {
         await navigator.share({
@@ -676,7 +647,6 @@ async function shareImage() {
       }
     }
 
-    // Fallback to WhatsApp text share if file share not available
     alert("Image sharing not supported on this device. Using text fallback.");
     shareToWhatsAppText();
 
@@ -690,7 +660,6 @@ async function shareImage() {
   }
 }
 
-/*** WhatsApp fallback (text only) ***/
 function shareToWhatsAppText() {
   if (!validateCustomerName()) return alert("Enter customer name first.");
   const text = encodeURIComponent(buildBillText());
@@ -698,8 +667,6 @@ function shareToWhatsAppText() {
   window.open(url, "_blank", "noopener");
 }
 
-/*** Expose functions for HTML onclick bindings ***/
 window.downloadImage = downloadImage;
 window.shareImage = shareImage;
 window.shareToWhatsAppText = shareToWhatsAppText;
-
