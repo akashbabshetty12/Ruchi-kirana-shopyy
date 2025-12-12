@@ -1,7 +1,3 @@
-/************** CONFIG **************/
-const ADMIN_PIN = "0805";
-let adminUnlocked = false;
-
 /************** INITIAL DATA **************/
 let products = JSON.parse(localStorage.getItem("products")) || [
   { id: 1, name: "Rice", category: "Staples", price: 60, active: true },
@@ -15,6 +11,49 @@ let cart = {};
 let selectedCategory = "All";
 let drawerOpen = false;
 let currentBillDate = null;
+
+/************** ADMIN PIN (DEVICE-BASED) **************/
+let savedAdminPin = localStorage.getItem("adminPin");
+let adminUnlocked = localStorage.getItem("adminLoggedIn") === "true";
+
+// First-time PIN setup or PIN verification
+function requestAdminPin() {
+  // FIRST TIME – Set PIN
+  if (!savedAdminPin) {
+    const newPin = prompt("Set new Admin PIN:");
+    if (!newPin || newPin.trim() === "") {
+      alert("PIN not set.");
+      return false;
+    }
+    localStorage.setItem("adminPin", newPin);
+    savedAdminPin = newPin;
+    localStorage.setItem("adminLoggedIn", "true");
+    adminUnlocked = true;
+    alert("Admin PIN created successfully!");
+    return true;
+  }
+
+  // LATER – Verify PIN
+  const entered = prompt("Enter Admin PIN:");
+  if (entered === savedAdminPin) {
+    localStorage.setItem("adminLoggedIn", "true");
+    adminUnlocked = true;
+    return true;
+  }
+
+  alert("Incorrect PIN.");
+  return false;
+}
+
+// Reset PIN
+function resetAdminPin() {
+  if (!confirm("Reset Admin PIN?")) return;
+  localStorage.removeItem("adminPin");
+  localStorage.removeItem("adminLoggedIn");
+  savedAdminPin = null;
+  adminUnlocked = false;
+  alert("Admin PIN reset. You will set a new PIN next time.");
+}
 
 /************** NORMALIZE PRODUCTS **************/
 function normalizeProducts() {
@@ -263,7 +302,7 @@ function formatDateTime(dt) {
   });
 }
 
-/************** BUILD BILL TEXT (Used for WhatsApp fallback) **************/
+/************** BILL TEXT FOR WHATSAPP **************/
 function buildBillText() {
   const name = (document.getElementById("custName")?.value || "").trim();
   const total = document.getElementById("grandTotalText")?.textContent || "₹0";
@@ -282,7 +321,7 @@ function buildBillText() {
   return text;
 }
 
-/************** SAVE BILL (history only) **************/
+/************** SAVE BILL HISTORY **************/
 function saveBillToHistory() {
   if (!validateCustomerName()) return alert("Enter customer name.");
 
@@ -352,7 +391,6 @@ function clearHistory() {
   }
 }
 
-/* Recreate a bill back into cart (load) */
 function recreateBill(id) {
   const bills = JSON.parse(localStorage.getItem("bills") || "[]");
   const bill = bills.find(b => b.id === id);
@@ -371,7 +409,7 @@ function recreateBill(id) {
   showDrawer();
 }
 
-/************** ADMIN **************/
+/************** ADMIN SECTION RENDER **************/
 function renderAdmin() {
   const table = document.getElementById("adminTable");
   if (!table) return;
@@ -449,6 +487,7 @@ const customerSection = document.getElementById("customerSection");
 const adminSection = document.getElementById("adminSection");
 const historySection = document.getElementById("historySection");
 
+/*** CUSTOMER TAB ***/
 if (customerTab) {
   customerTab.onclick = () => {
     if (customerSection) customerSection.style.display = "block";
@@ -461,13 +500,13 @@ if (customerTab) {
   };
 }
 
+/*** ADMIN TAB (PIN PROTECTED) ***/
 if (adminTab) {
   adminTab.onclick = () => {
+
+    // Unlock admin using device PIN
     if (!adminUnlocked) {
-      const pin = prompt("Enter Admin PIN");
-      if (pin !== ADMIN_PIN) return alert("Incorrect PIN.");
-      adminUnlocked = true;
-      alert("Admin unlocked.");
+      if (!requestAdminPin()) return;
     }
 
     if (adminSection) adminSection.style.display = "block";
@@ -477,9 +516,12 @@ if (adminTab) {
     adminTab.classList.add("active");
     if (customerTab) customerTab.classList.remove("active");
     if (historyTab) historyTab.classList.remove("active");
+
+    renderAdmin();
   };
 }
 
+/*** HISTORY TAB ***/
 if (historyTab) {
   historyTab.onclick = () => {
     if (historySection) historySection.style.display = "block";
