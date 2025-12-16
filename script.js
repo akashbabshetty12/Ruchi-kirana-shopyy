@@ -1,10 +1,48 @@
 /************** INITIAL DATA **************/
 let products = JSON.parse(localStorage.getItem("products")) || [
   { id: 1, name: "Rice", category: "Staples", price: 60, active: true },
-  { id: 2, name: "Oil", category: "Oil", price: 140, active: true },
-  { id: 3, name: "Sugar", category: "Staples", price: 50, active: true },
-  { id: 4, name: "Biscuits", category: "Snacks", price: 20, active: true },
-  { id: 5, name: "Cold Drink", category: "Beverages", price: 35, active: true }
+ { id: 1, name: "Gold Flake", category: "Cigarette", price: 60, active: true },
+ { id: 2, name: "Bristol", category: "Cigarette", price: 140, active: true },
+ { id: 3, name: "Gold Flake king", category: "Cigarette", price: 50, active: true },
+ { id: 4, name: "Gold Flake Lites", category: "Cigarette", price: 20, active: true },
+ { id: 5, name: "Players", category: "Cigarette", price: 35, active: true },
+ { id: 6, name: "Indiment", category: "Cigarette", price: 140, active: true },
+ { id: 7, name: "Garam", category: "Cigarette", price: 50, active: true },
+ { id: 8, name: "Black", category: "Cigarette", price: 20, active: true },
+ { id: 9, name: "Ganesh", category: "Cigarette", price: 35, active: true },
+ { id: 10, name: "Mahesh", category: "Cigarette", price: 140, active: true },
+ { id: 11, name: "100 Bidi", category: "Cigarette", price: 50, active: true },
+ { id: 12, name: "Vimal", category: "Pan Masala", price: 20, active: true },
+ { id: 13, name: "RR", category: "Pan Masala", price: 35, active: true },
+ { id: 14, name: "Super", category: "Pan Masala", price: 140, active: true },
+ { id: 15, name: "Baba", category: "Pan Masala", price: 50, active: true },
+ { id: 16, name: "RMD B(1 Pc)", category: "Pan Masala", price: 20, active: true },
+ { id: 17, name: "RMD S(1 Pc)", category: "Pan Masala", price: 35, active: true },
+ { id: 18, name: "Elichi", category: "Pan Masala", price: 50, active: true },
+ { id: 19, name: "7 star", category: "Pan Masala", price: 20, active: true },
+ { id: 20, name: "sony", category: "Pan Masala", price: 35, active: true },
+ { id: 21, name: "chali adki", category: "Pan Masala", price: 50, active: true },
+ { id: 22, name: "Dal", category: "Pan Masala", price: 20, active: true },
+ { id: 23, name: "Raju", category: "Pan Masala", price: 35, active: true },
+ { id: 24, name: "Sazan", category: "Pan Masala", price: 20, active: true },
+ { id: 25, name: "Patanjali", category: "Biscuits", price: 35, active: true },
+ { id: 26, name: "Krackjack", category: "Biscuits", price: 35, active: true },
+ { id: 27, name: "Patanjali", category: "Biscuits", price: 35, active: true },
+ { id: 28, name: "20-20", category: "Biscuits", price: 35, active: true },
+ { id: 29, name: "Good Day", category: "Biscuits", price: 35, active: true },
+ { id: 30, name: "Parle-Gold", category: "Biscuits", price: 35, active: true },
+ { id: 31, name: "Marie Gold", category: "Biscuits", price: 35, active: true },
+ { id: 32, name: "Happy Happy", category: "Biscuits", price: 35, active: true },
+ { id: 33, name: "Monnacco", category: "Biscuits", price: 35, active: true },
+ { id: 34, name: "Hide & Seek", category: "Biscuits", price: 35, active: true },
+ { id: 35, name: "Bourbon", category: "Biscuits", price: 35, active: true },
+ { id: 36, name: "Jim Jam", category: "Biscuits", price: 35, active: true },
+ { id: 37, name: "Dark Fantasy", category: "Biscuits", price: 35, active: true },
+ { id: 38, name: "Oreo", category: "Biscuits", price: 35, active: true },
+ { id: 39, name: "Bourbon Dark", category: "Biscuits", price: 35, active: true },
+ { id: 40, name: "Marie Gold", category: "Biscuits", price: 35, active: true },
+ { id: 41, name: "Happy Happy", category: "Biscuits", price: 35, active: true },
+ { id: 42, name: "Monnacco", category: "Biscuits", price: 35, active: true }, 
 ];
 
 let cart = {};
@@ -670,3 +708,4 @@ function shareToWhatsAppText() {
 window.downloadImage = downloadImage;
 window.shareImage = shareImage;
 window.shareToWhatsAppText = shareToWhatsAppText;
+
