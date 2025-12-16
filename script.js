@@ -26,7 +26,7 @@ let products = JSON.parse(localStorage.getItem("products")) || [
  { id: 24, name: "Sazan", category: "Pan Masala", price: 20, active: true },
  { id: 25, name: "Patanjali", category: "Biscuits", price: 35, active: true },
  { id: 26, name: "Krackjack", category: "Biscuits", price: 35, active: true },
- { id: 27, name: "Patanjali", category: "Biscuits", price: 35, active: true },
+ { id: 27, name: "Bourbon Dark", category: "Biscuits", price: 35, active: true },
  { id: 28, name: "20-20", category: "Biscuits", price: 35, active: true },
  { id: 29, name: "Good Day", category: "Biscuits", price: 35, active: true },
  { id: 30, name: "Parle-Gold", category: "Biscuits", price: 35, active: true },
@@ -37,11 +37,7 @@ let products = JSON.parse(localStorage.getItem("products")) || [
  { id: 35, name: "Bourbon", category: "Biscuits", price: 35, active: true },
  { id: 36, name: "Jim Jam", category: "Biscuits", price: 35, active: true },
  { id: 37, name: "Dark Fantasy", category: "Biscuits", price: 35, active: true },
- { id: 38, name: "Oreo", category: "Biscuits", price: 35, active: true },
- { id: 39, name: "Bourbon Dark", category: "Biscuits", price: 35, active: true },
- { id: 40, name: "Marie Gold", category: "Biscuits", price: 35, active: true },
- { id: 41, name: "Happy Happy", category: "Biscuits", price: 35, active: true },
- { id: 42, name: "Monnacco", category: "Biscuits", price: 35, active: true }  
+ { id: 38, name: "Oreo", category: "Biscuits", price: 35, active: true }
 ];
 
 let cart = {};
@@ -707,4 +703,3 @@ function shareToWhatsAppText() {
 window.downloadImage = downloadImage;
 window.shareImage = shareImage;
 window.shareToWhatsAppText = shareToWhatsAppText;
-
